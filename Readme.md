@@ -1,3 +1,5 @@
+初学者建议直接下载Releases并新增config.ini配置文件，即可。
+
 ＝＝＝＝＝＝＝＝
 关于Ｔelegram Token和ＣhatID
 ＝＝＝＝＝＝＝＝
