@@ -1,4 +1,8 @@
+this is a telegram-stealer,can be steal everything about the target///
+这是一个电报窃取器，可以窃取目标的所有信息///
+
 初学者建议直接下载Releases并新增config.ini配置文件，即可。
+
 
 ＝＝＝＝＝＝＝＝
 关于Ｔelegram Token和ＣhatID
